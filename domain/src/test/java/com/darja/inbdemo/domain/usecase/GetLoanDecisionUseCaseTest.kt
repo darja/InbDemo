@@ -24,18 +24,12 @@ class GetLoanDecisionUseCaseTest {
     fun setUp() {
         clientRepository = mock {
             onBlocking { getClientByPersonalCode(CLIENT_UNKNOWN) } doThrow ClientNotFoundException()
-            onBlocking { getClientByPersonalCode(CLIENT_IN_DEBT) } doReturn ClientProfile(
-                CLIENT_IN_DEBT,
-                CreditStatus.Debt(100)
-            )
-            onBlocking { getClientByPersonalCode(CLIENT_SEGMENT_1) } doReturn ClientProfile(
-                CLIENT_SEGMENT_1,
-                CreditStatus.Segment(SEGMENT_1)
-            )
-            onBlocking { getClientByPersonalCode(CLIENT_SEGMENT_2) } doReturn ClientProfile(
-                CLIENT_SEGMENT_2,
-                CreditStatus.Segment(SEGMENT_2)
-            )
+            onBlocking { getClientByPersonalCode(CLIENT_IN_DEBT) } doReturn
+                    ClientProfile(CLIENT_IN_DEBT, CreditStatus.Debt)
+            onBlocking { getClientByPersonalCode(CLIENT_SEGMENT_1) } doReturn
+                    ClientProfile(CLIENT_SEGMENT_1, CreditStatus.Segment(SEGMENT_1))
+            onBlocking { getClientByPersonalCode(CLIENT_SEGMENT_2) } doReturn
+                    ClientProfile(CLIENT_SEGMENT_2, CreditStatus.Segment(SEGMENT_2))
         }
 
         creditRules = mock {
@@ -55,7 +49,11 @@ class GetLoanDecisionUseCaseTest {
         val decision = runBlocking { useCase.execute(request) }
 
         assertTrue("Loan is rejected for an unknown user", decision is LoanDecision.Rejected)
-        assertEquals("Rejection reason", RejectionReason.UNKNOWN_CLIENT, (decision as LoanDecision.Rejected).reason)
+        assertEquals(
+            "Rejection reason",
+            RejectionReason.UNKNOWN_CLIENT,
+            (decision as LoanDecision.Rejected).reason
+        )
     }
 
     /**
@@ -69,7 +67,11 @@ class GetLoanDecisionUseCaseTest {
         val decision = runBlocking { useCase.execute(request) }
 
         assertTrue("Loan is rejected for a user in debt", decision is LoanDecision.Rejected)
-        assertEquals("Rejection reason", RejectionReason.DEBT, (decision as LoanDecision.Rejected).reason)
+        assertEquals(
+            "Rejection reason",
+            RejectionReason.DEBT,
+            (decision as LoanDecision.Rejected).reason
+        )
     }
 
     /**
@@ -95,8 +97,15 @@ class GetLoanDecisionUseCaseTest {
         val request = GetLoanDecisionUseCase.Request(CLIENT_SEGMENT_2, 4000, 12)
         val decision = runBlocking { useCase.execute(request) }
 
-        assertTrue("Loan is rejected, lower amount suggested", decision is LoanDecision.RejectedWithOption)
-        assertEquals("Max sum", 3600, (decision as LoanDecision.RejectedWithOption).maxApprovedAmount)
+        assertTrue(
+            "Loan is rejected, lower amount suggested",
+            decision is LoanDecision.RejectedWithOption
+        )
+        assertEquals(
+            "Max sum",
+            3600,
+            (decision as LoanDecision.RejectedWithOption).maxApprovedAmount
+        )
     }
 
     companion object {

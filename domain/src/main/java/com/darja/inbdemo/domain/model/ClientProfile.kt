@@ -15,9 +15,8 @@ class ClientProfile(
 sealed class CreditStatus {
     /**
      * Status indicating that the client is in debt
-     * @param amount is added just for sake of Kotlin sealed class
      */
-    data class Debt(val amount: Int): CreditStatus()
+    object Debt: CreditStatus()
 
     /**
      * Status indicating that the client belongs to a particular segment
