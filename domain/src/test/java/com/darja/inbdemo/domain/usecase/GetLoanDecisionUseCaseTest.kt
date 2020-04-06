@@ -7,11 +7,14 @@ import com.darja.inbdemo.domain.model.RejectionReason
 import com.darja.inbdemo.domain.repo.ClientNotFoundException
 import com.darja.inbdemo.domain.repo.ClientRepository
 import com.darja.inbdemo.domain.repo.CreditRulesRepository
+import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.doThrow
+import com.nhaarman.mockitokotlin2.mock
+import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Mockito
 
 class GetLoanDecisionUseCaseTest {
     private lateinit var clientRepository: ClientRepository
@@ -19,18 +22,26 @@ class GetLoanDecisionUseCaseTest {
 
     @Before
     fun setUp() {
-        clientRepository = Mockito.mock(ClientRepository::class.java)
-        Mockito.`when`(clientRepository.getClientByPersonalCode(CLIENT_UNKNOWN)).thenThrow(ClientNotFoundException())
-        Mockito.`when`(clientRepository.getClientByPersonalCode(CLIENT_IN_DEBT)).thenReturn(
-            ClientProfile(CLIENT_IN_DEBT, CreditStatus.Debt(100)))
-        Mockito.`when`(clientRepository.getClientByPersonalCode(CLIENT_SEGMENT_1)).thenReturn(
-            ClientProfile(CLIENT_SEGMENT_1, CreditStatus.Segment(SEGMENT_1)))
-        Mockito.`when`(clientRepository.getClientByPersonalCode(CLIENT_SEGMENT_2)).thenReturn(
-            ClientProfile(CLIENT_SEGMENT_2, CreditStatus.Segment(SEGMENT_2)))
+        clientRepository = mock {
+            onBlocking { getClientByPersonalCode(CLIENT_UNKNOWN) } doThrow ClientNotFoundException()
+            onBlocking { getClientByPersonalCode(CLIENT_IN_DEBT) } doReturn ClientProfile(
+                CLIENT_IN_DEBT,
+                CreditStatus.Debt(100)
+            )
+            onBlocking { getClientByPersonalCode(CLIENT_SEGMENT_1) } doReturn ClientProfile(
+                CLIENT_SEGMENT_1,
+                CreditStatus.Segment(SEGMENT_1)
+            )
+            onBlocking { getClientByPersonalCode(CLIENT_SEGMENT_2) } doReturn ClientProfile(
+                CLIENT_SEGMENT_2,
+                CreditStatus.Segment(SEGMENT_2)
+            )
+        }
 
-        creditRules = Mockito.mock(CreditRulesRepository::class.java)
-        Mockito.`when`(creditRules.getCreditModifier(1)).thenReturn(MODIFIER_1)
-        Mockito.`when`(creditRules.getCreditModifier(2)).thenReturn(MODIFIER_2)
+        creditRules = mock {
+            on { getCreditModifier(SEGMENT_1) } doReturn MODIFIER_1
+            on { getCreditModifier(SEGMENT_2) } doReturn MODIFIER_2
+        }
     }
 
     /**
@@ -41,7 +52,7 @@ class GetLoanDecisionUseCaseTest {
         val useCase = GetLoanDecisionUseCase(clientRepository, creditRules)
 
         val request = GetLoanDecisionUseCase.Request(CLIENT_UNKNOWN, 122, 12)
-        val decision = useCase.execute(request)
+        val decision = runBlocking { useCase.execute(request) }
 
         assertTrue("Loan is rejected for an unknown user", decision is LoanDecision.Rejected)
         assertEquals("Rejection reason", RejectionReason.UNKNOWN_CLIENT, (decision as LoanDecision.Rejected).reason)
@@ -55,7 +66,7 @@ class GetLoanDecisionUseCaseTest {
         val useCase = GetLoanDecisionUseCase(clientRepository, creditRules)
 
         val request = GetLoanDecisionUseCase.Request(CLIENT_IN_DEBT, 122, 12)
-        val decision = useCase.execute(request)
+        val decision = runBlocking { useCase.execute(request) }
 
         assertTrue("Loan is rejected for a user in debt", decision is LoanDecision.Rejected)
         assertEquals("Rejection reason", RejectionReason.DEBT, (decision as LoanDecision.Rejected).reason)
@@ -69,8 +80,7 @@ class GetLoanDecisionUseCaseTest {
         val useCase = GetLoanDecisionUseCase(clientRepository, creditRules)
 
         val request = GetLoanDecisionUseCase.Request(CLIENT_SEGMENT_1, 1000, 12)
-        val decision = useCase.execute(request)
-
+        val decision = runBlocking { useCase.execute(request) }
         assertTrue("Loan is approved", decision is LoanDecision.Approved)
         assertEquals("Max sum", 1200, (decision as LoanDecision.Approved).maxApprovedAmount)
     }
@@ -83,7 +93,7 @@ class GetLoanDecisionUseCaseTest {
         val useCase = GetLoanDecisionUseCase(clientRepository, creditRules)
 
         val request = GetLoanDecisionUseCase.Request(CLIENT_SEGMENT_2, 4000, 12)
-        val decision = useCase.execute(request)
+        val decision = runBlocking { useCase.execute(request) }
 
         assertTrue("Loan is rejected, lower amount suggested", decision is LoanDecision.RejectedWithOption)
         assertEquals("Max sum", 3600, (decision as LoanDecision.RejectedWithOption).maxApprovedAmount)

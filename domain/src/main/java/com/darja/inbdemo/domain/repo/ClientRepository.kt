@@ -7,6 +7,6 @@ import com.darja.inbdemo.domain.model.ClientProfile
  */
 interface ClientRepository {
     @Throws(ClientNotFoundException::class)
-    fun getClientByPersonalCode(personalCode: String): ClientProfile
+    suspend fun getClientByPersonalCode(personalCode: String): ClientProfile
 }
 

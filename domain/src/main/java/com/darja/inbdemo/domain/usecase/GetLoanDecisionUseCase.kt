@@ -9,7 +9,7 @@ import com.darja.inbdemo.domain.repo.CreditRulesRepository
 
 class GetLoanDecisionUseCase(private val clientRepository: ClientRepository,
                              private val creditRules: CreditRulesRepository) {
-    fun execute(request: Request): LoanDecision {
+    suspend fun execute(request: Request): LoanDecision {
         lateinit var decision: LoanDecision
 
         try {
