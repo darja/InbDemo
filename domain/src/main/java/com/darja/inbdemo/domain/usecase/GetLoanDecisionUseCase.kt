@@ -34,7 +34,7 @@ class GetLoanDecisionUseCase(private val clientRepository: ClientRepository,
                     decision = if (score > 1) {
                         LoanDecision.Approved(maxAmount)
                     } else {
-                        LoanDecision.Suggested(maxAmount)
+                        LoanDecision.RejectedWithOption(maxAmount)
                     }
                 }
             }

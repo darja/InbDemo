@@ -85,8 +85,8 @@ class GetLoanDecisionUseCaseTest {
         val request = GetLoanDecisionUseCase.Request(CLIENT_SEGMENT_2, 4000, 12)
         val decision = useCase.execute(request)
 
-        assertTrue("Loan is rejected, lower amount suggested", decision is LoanDecision.Suggested)
-        assertEquals("Max sum", 3600, (decision as LoanDecision.Suggested).maxApprovedAmount)
+        assertTrue("Loan is rejected, lower amount suggested", decision is LoanDecision.RejectedWithOption)
+        assertEquals("Max sum", 3600, (decision as LoanDecision.RejectedWithOption).maxApprovedAmount)
     }
 
     companion object {
