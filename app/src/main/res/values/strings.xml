@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">InbDemo</string>
+
+    <string name="hint_personal_code">Personal Code</string>
+    <string name="hint_amount">Loan Amount</string>
+    <string name="hint_period">Period</string>
+    <string name="period_month">months</string>
+    <string name="amount_eur">EUR</string>
+    <string name="button_check">Check</string>
+
+    <string name="error_personal_code_length">Value should contain 11 digits</string>
 </resources>
