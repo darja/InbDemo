@@ -1,2 +1,3 @@
 rootProject.name='InbDemo'
 include ':app'
+include ':domain'
