@@ -1,9 +1,10 @@
 package com.darja.inbdemo.domain.model
 
-sealed class LoanDecision
+sealed class LoanDecision {
 
-data class ApprovedHigherLoanDecision(val approvedAmount: Int): LoanDecision()
+    data class Approved(val maxApprovedAmount: Int) : LoanDecision()
 
-data class ApprovedLowerLoanDecision(val approvedAmount: Int): LoanDecision()
+    data class ApprovedLower(val approvedAmount: Int) : LoanDecision()
 
-data class RejectedLoanDecision(val reason: RejectionReason): LoanDecision()
+    data class Rejected(val reason: RejectionReason) : LoanDecision()
+}

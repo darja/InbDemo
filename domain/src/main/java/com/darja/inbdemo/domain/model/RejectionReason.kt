@@ -1,6 +1,6 @@
 package com.darja.inbdemo.domain.model
 
 enum class RejectionReason {
-    INSUFFICIENT_SCORE,
+    DEBT,
     UNKNOWN_CLIENT
 }

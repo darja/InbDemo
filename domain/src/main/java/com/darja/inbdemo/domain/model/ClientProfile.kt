@@ -5,21 +5,23 @@ package com.darja.inbdemo.domain.model
  */
 class ClientProfile(
     val personalCode: String,
-    val status: ClientStatus
+    val creditStatus: CreditStatus
 )
 
 /**
  * Status that should be checked for the score calculation
  */
-sealed class ClientStatus
+// todo think about naming
+sealed class CreditStatus {
+    /**
+     * Status indicating that the client is in debt
+     * @param amount is added just for sake of Kotlin sealed class
+     */
+    data class Debt(val amount: Int): CreditStatus()
 
-/**
- * Status indicating that the client is in debt
- * @param amount is added just for sake of Kotlin sealed class
- */
-data class DebtClientStatus(val amount: Int): ClientStatus()
+    /**
+     * Status indicating that the client belongs to a particular segment
+     */
+    data class Segment(val segment: Int): CreditStatus()
+}
 
-/**
- * Status indicating that the client belongs to a particular segment
- */
-data class ClientSegment(val segment: ClientStatus): ClientStatus()
