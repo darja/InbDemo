@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.darja.inbdemo.ui.decision.DecisionActivityView
+<com.darja.inbdemo.ui.claim.ClaimActivityView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/decision_root"
+    android:id="@+id/claim_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingStart="64dp"
     android:paddingEnd="64dp"
     android:paddingTop="32dp"
-    tools:context=".ui.decision.DecisionActivity">
+    tools:context=".ui.claim.ClaimActivity">
 
     <!-- Personal Code -->
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/decision_personal_number_container"
+        android:id="@+id/claim_personal_number_container"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -25,7 +25,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/decision_personal_number"
+            android:id="@+id/claim_personal_number"
             android:inputType="number"
             android:maxLength="11"
             />
@@ -35,10 +35,10 @@
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/decision_amount_container"
+        android:id="@+id/claim_amount_container"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/decision_personal_number_container"
+        app:layout_constraintTop_toBottomOf="@id/claim_personal_number_container"
         android:layout_marginTop="16dp"
         android:hint="@string/hint_amount"
         tools:helperText="2000—10 000 EUR"
@@ -46,7 +46,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/decision_amount"
+            android:id="@+id/claim_amount"
             android:inputType="number"
             android:maxLength="11"
             />
@@ -56,22 +56,22 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/decision_amount_units"
+        android:id="@+id/claim_amount_units"
         android:text="@string/amount_eur"
-        app:layout_constraintStart_toEndOf="@id/decision_amount_container"
+        app:layout_constraintStart_toEndOf="@id/claim_amount_container"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/decision_amount_container"
-        app:layout_constraintBottom_toBottomOf="@id/decision_amount_container"
+        app:layout_constraintTop_toTopOf="@id/claim_amount_container"
+        app:layout_constraintBottom_toBottomOf="@id/claim_amount_container"
         />
 
     <!-- Period -->
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:id="@+id/decision_period_container"
+        android:id="@+id/claim_period_container"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/decision_period_units"
-        app:layout_constraintTop_toBottomOf="@id/decision_amount_container"
+        app:layout_constraintEnd_toStartOf="@id/claim_period_units"
+        app:layout_constraintTop_toBottomOf="@id/claim_amount_container"
         app:layout_constraintHorizontal_chainStyle="packed"
         android:layout_marginEnd="16dp"
         android:layout_marginTop="16dp"
@@ -81,7 +81,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/decision_period"
+            android:id="@+id/claim_period"
             android:inputType="number"
             />
     </com.google.android.material.textfield.TextInputLayout>
@@ -90,22 +90,22 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/decision_period_units"
+        android:id="@+id/claim_period_units"
         android:text="@string/period_month"
-        app:layout_constraintStart_toEndOf="@id/decision_period_container"
+        app:layout_constraintStart_toEndOf="@id/claim_period_container"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/decision_period_container"
-        app:layout_constraintBottom_toBottomOf="@id/decision_period_container"
+        app:layout_constraintTop_toTopOf="@id/claim_period_container"
+        app:layout_constraintBottom_toBottomOf="@id/claim_period_container"
         />
 
     <!-- Check button -->
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/decision_check_button"
-        app:layout_constraintTop_toBottomOf="@id/decision_period_container"
+        android:id="@+id/claim_check_button"
+        app:layout_constraintTop_toBottomOf="@id/claim_period_container"
         android:layout_marginTop="24dp"
         android:text="@string/button_check"
         />
 
-</com.darja.inbdemo.ui.decision.DecisionActivityView>
+</com.darja.inbdemo.ui.claim.ClaimActivityView>
