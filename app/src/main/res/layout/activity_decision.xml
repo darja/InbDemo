@@ -32,7 +32,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Amount -->
-    <com.google.android.material.textfield.TextInputLayout
+    <com.darja.inbdemo.view.ValidatedTextInput
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:id="@+id/decision_amount_container"
@@ -43,15 +43,10 @@
         android:layout_marginEnd="16dp"
         android:layout_marginTop="16dp"
         android:hint="@string/hint_amount"
-        >
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/decision_amount"
-            android:inputType="number"
-            android:hint="@string/hint_amount"
-            />
-    </com.google.android.material.textfield.TextInputLayout>
+        android:inputType="number"
+        android:maxLength="4"
+        app:validation_event="lost_focus"
+        />
 
     <!-- Amount unit label -->
     <TextView
