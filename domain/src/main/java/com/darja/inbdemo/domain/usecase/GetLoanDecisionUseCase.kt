@@ -7,6 +7,7 @@ import com.darja.inbdemo.domain.model.RejectionReason
 import com.darja.inbdemo.domain.repo.ClientNotFoundException
 import com.darja.inbdemo.domain.repo.ClientRepository
 import com.darja.inbdemo.domain.repo.CreditRulesRepository
+import kotlin.math.min
 
 class GetLoanDecisionUseCase(private val clientRepository: ClientRepository,
                              private val creditRules: CreditRulesRepository) {
@@ -30,12 +31,13 @@ class GetLoanDecisionUseCase(private val clientRepository: ClientRepository,
                     // Amount = Period * CreditModifier / Score
                     // as amount and score are inversely proportional, the biggest amount is reached when score is minimum.
                     // minimum accepted score is 1, so MaxAmount = Period * CreditModifier
-                    val maxAmount = claim.periodMonths * creditModifier
+                    // Also, amount shouldn't exceed the maximum defined in credit rules
+                    val maxAmount = min(claim.periodMonths * creditModifier, creditRules.getMaxLoan())
 
-                    decision = if (score > 1) {
-                        LoanDecision.Approved(maxAmount)
-                    } else {
-                        LoanDecision.RejectedWithOption(maxAmount)
+                    decision = when {
+                        score > 1 -> LoanDecision.Approved(maxAmount)
+                        maxAmount > creditRules.getMinLoan() -> LoanDecision.RejectedWithOption(maxAmount)
+                        else -> LoanDecision.Rejected(RejectionReason.INSUFFICIENT_SCORE)
                     }
                 }
             }

@@ -8,8 +8,9 @@ import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.mock
 import kotlinx.coroutines.runBlocking
+import org.hamcrest.CoreMatchers.instanceOf
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
+import org.junit.Assert.assertThat
 import org.junit.Before
 import org.junit.Test
 
@@ -32,11 +33,13 @@ class GetLoanDecisionUseCaseTest {
         creditRules = mock {
             on { getCreditModifier(SEGMENT_1) } doReturn MODIFIER_1
             on { getCreditModifier(SEGMENT_2) } doReturn MODIFIER_2
+            on { getMinLoan() } doReturn 2000
+            on { getMaxLoan() } doReturn 10_000
         }
     }
 
     /**
-     * Test case: Unknown client tries to request a loan
+     * Test case: Reject for an unknown client
      */
     @Test
     fun testUnknownClient() {
@@ -45,7 +48,7 @@ class GetLoanDecisionUseCaseTest {
         val request = LoanClaim(CLIENT_UNKNOWN, 122, 12)
         val decision = runBlocking { useCase.execute(request) }
 
-        assertTrue("Loan is rejected for an unknown user", decision is LoanDecision.Rejected)
+        assertThat("Decision", decision, instanceOf(LoanDecision.Rejected::class.java))
         assertEquals(
             "Rejection reason",
             RejectionReason.UNKNOWN_CLIENT,
@@ -54,7 +57,7 @@ class GetLoanDecisionUseCaseTest {
     }
 
     /**
-     * Test case: A client with a debt tries to request a loan
+     * Test case: Reject for a client with a debt
      */
     @Test
     fun testClientInDebt() {
@@ -63,25 +66,12 @@ class GetLoanDecisionUseCaseTest {
         val request = LoanClaim(CLIENT_IN_DEBT, 122, 12)
         val decision = runBlocking { useCase.execute(request) }
 
-        assertTrue("Loan is rejected for a user in debt", decision is LoanDecision.Rejected)
+        assertThat("Decision", decision, instanceOf(LoanDecision.Rejected::class.java))
         assertEquals(
             "Rejection reason",
             RejectionReason.DEBT,
             (decision as LoanDecision.Rejected).reason
         )
-    }
-
-    /**
-     * Test case: Loan is approved
-     */
-    @Test
-    fun testApproveHigherAmount() {
-        val useCase = GetLoanDecisionUseCase(clientRepository, creditRules)
-
-        val request = LoanClaim(CLIENT_SEGMENT_1, 1000, 12)
-        val decision = runBlocking { useCase.execute(request) }
-        assertTrue("Loan is approved", decision is LoanDecision.Approved)
-        assertEquals("Max sum", 1200, (decision as LoanDecision.Approved).maxApprovedAmount)
     }
 
     /**
@@ -94,15 +84,56 @@ class GetLoanDecisionUseCaseTest {
         val request = LoanClaim(CLIENT_SEGMENT_2, 4000, 12)
         val decision = runBlocking { useCase.execute(request) }
 
-        assertTrue(
-            "Loan is rejected, lower amount suggested",
-            decision is LoanDecision.RejectedWithOption
-        )
+        assertThat("Decision", decision, instanceOf(LoanDecision.RejectedWithOption::class.java))
         assertEquals(
             "Max sum",
             3600,
             (decision as LoanDecision.RejectedWithOption).maxApprovedAmount
         )
+    }
+
+    /**
+     * Test case: Loan is rejected, lower loan cannot be suggested as it is smaller than minimum
+     */
+    @Test
+    fun testRejectInsufficientScore() {
+        val useCase = GetLoanDecisionUseCase(clientRepository, creditRules)
+
+        val request = LoanClaim(CLIENT_SEGMENT_1, 2000, 12)
+        val decision = runBlocking { useCase.execute(request) }
+
+        assertThat("Decision", decision, instanceOf(LoanDecision.Rejected::class.java))
+        assertEquals(
+            "Rejection reason",
+            RejectionReason.INSUFFICIENT_SCORE,
+            (decision as LoanDecision.Rejected).reason
+        )
+    }
+
+    /**
+     * Test case: Loan is approved
+     */
+    @Test
+    fun testApproveHigherAmount() {
+        val useCase = GetLoanDecisionUseCase(clientRepository, creditRules)
+
+        val request = LoanClaim(CLIENT_SEGMENT_1, 2000, 30)
+        val decision = runBlocking { useCase.execute(request) }
+        assertThat("Decision", decision, instanceOf(LoanDecision.Approved::class.java))
+        assertEquals("Max sum", 3000, (decision as LoanDecision.Approved).maxApprovedAmount)
+    }
+
+    /**
+     * Test case: Loan is approved, suggested loan amount exceeds maximum
+     */
+    @Test
+    fun testApproveMaximumAmount() {
+        val useCase = GetLoanDecisionUseCase(clientRepository, creditRules)
+
+        val request = LoanClaim(CLIENT_SEGMENT_2, 5000, 40)
+        val decision = runBlocking { useCase.execute(request) }
+        assertThat("Decision", decision, instanceOf(LoanDecision.Approved::class.java))
+        assertEquals("Max sum", 10000, (decision as LoanDecision.Approved).maxApprovedAmount)
     }
 
     companion object {
