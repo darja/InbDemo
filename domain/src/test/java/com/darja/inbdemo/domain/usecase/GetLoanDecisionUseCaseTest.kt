@@ -1,9 +1,6 @@
 package com.darja.inbdemo.domain.usecase
 
-import com.darja.inbdemo.domain.model.ClientProfile
-import com.darja.inbdemo.domain.model.CreditStatus
-import com.darja.inbdemo.domain.model.LoanDecision
-import com.darja.inbdemo.domain.model.RejectionReason
+import com.darja.inbdemo.domain.model.*
 import com.darja.inbdemo.domain.repo.ClientNotFoundException
 import com.darja.inbdemo.domain.repo.ClientRepository
 import com.darja.inbdemo.domain.repo.CreditRulesRepository
@@ -45,7 +42,7 @@ class GetLoanDecisionUseCaseTest {
     fun testUnknownClient() {
         val useCase = GetLoanDecisionUseCase(clientRepository, creditRules)
 
-        val request = GetLoanDecisionUseCase.Request(CLIENT_UNKNOWN, 122, 12)
+        val request = LoanClaim(CLIENT_UNKNOWN, 122, 12)
         val decision = runBlocking { useCase.execute(request) }
 
         assertTrue("Loan is rejected for an unknown user", decision is LoanDecision.Rejected)
@@ -63,7 +60,7 @@ class GetLoanDecisionUseCaseTest {
     fun testClientInDebt() {
         val useCase = GetLoanDecisionUseCase(clientRepository, creditRules)
 
-        val request = GetLoanDecisionUseCase.Request(CLIENT_IN_DEBT, 122, 12)
+        val request = LoanClaim(CLIENT_IN_DEBT, 122, 12)
         val decision = runBlocking { useCase.execute(request) }
 
         assertTrue("Loan is rejected for a user in debt", decision is LoanDecision.Rejected)
@@ -81,7 +78,7 @@ class GetLoanDecisionUseCaseTest {
     fun testApproveHigherAmount() {
         val useCase = GetLoanDecisionUseCase(clientRepository, creditRules)
 
-        val request = GetLoanDecisionUseCase.Request(CLIENT_SEGMENT_1, 1000, 12)
+        val request = LoanClaim(CLIENT_SEGMENT_1, 1000, 12)
         val decision = runBlocking { useCase.execute(request) }
         assertTrue("Loan is approved", decision is LoanDecision.Approved)
         assertEquals("Max sum", 1200, (decision as LoanDecision.Approved).maxApprovedAmount)
@@ -94,7 +91,7 @@ class GetLoanDecisionUseCaseTest {
     fun testApproveLowerAmount() {
         val useCase = GetLoanDecisionUseCase(clientRepository, creditRules)
 
-        val request = GetLoanDecisionUseCase.Request(CLIENT_SEGMENT_2, 4000, 12)
+        val request = LoanClaim(CLIENT_SEGMENT_2, 4000, 12)
         val decision = runBlocking { useCase.execute(request) }
 
         assertTrue(
