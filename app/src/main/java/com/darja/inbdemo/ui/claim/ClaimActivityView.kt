@@ -40,12 +40,12 @@ class ClaimActivityView(context: Context, attrs: AttributeSet) : ConstraintLayou
     }
 
     // region Personal code
-    internal fun getPersonalCode(): String {
-        return personalNumberView.text.toString()
-    }
+    internal fun getPersonalCode() = personalNumberView.text.toString()
 
     internal fun setPersonalCodeError(error: String?) {
-        personalNumberContainerView.error = error
+        if (personalNumberContainerView.error != null || error != null) {
+            personalNumberContainerView.error = error
+        }
     }
     // endregion
 
@@ -56,8 +56,12 @@ class ClaimActivityView(context: Context, attrs: AttributeSet) : ConstraintLayou
     }
 
     internal fun setAmountError(error: String?) {
-        amountContainerView.error = error
+        if (amountContainerView.error != null || error != null) {
+            amountContainerView.error = error
+        }
     }
+
+    internal fun getAmount() = amountView.text.toString()
 
     // endregion
 
@@ -68,8 +72,12 @@ class ClaimActivityView(context: Context, attrs: AttributeSet) : ConstraintLayou
     }
 
     internal fun setPeriodError(error: String?) {
-        periodContainerView.error = error
+        if (periodContainerView.error != null || error != null) {
+            periodContainerView.error = error
+        }
     }
+
+    internal fun getPeriod() = periodView.text.toString()
 
     // endregion
 
