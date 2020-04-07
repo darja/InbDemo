@@ -12,6 +12,7 @@ class HardcodedClientRepository: ClientRepository {
 
     private val registeredClients: List<ClientProfile> = listOf(
         ClientProfile("49002010965", CreditStatus.Debt),
+        ClientProfile("44444444444", CreditStatus.Debt),
         ClientProfile("49002010976", CreditStatus.Segment(1)),
         ClientProfile("49002010987", CreditStatus.Segment(2)),
         ClientProfile("39012210987", CreditStatus.Segment(2)),
@@ -19,7 +20,10 @@ class HardcodedClientRepository: ClientRepository {
         ClientProfile("35610140437", CreditStatus.Segment(2)),
         ClientProfile("47812240132", CreditStatus.Segment(2)),
         ClientProfile("35610140437", CreditStatus.Segment(3)),
-        ClientProfile("49002010998", CreditStatus.Segment(3))
+        ClientProfile("49002010998", CreditStatus.Segment(3)),
+        ClientProfile("12312312312", CreditStatus.Segment(1)),
+        ClientProfile("23123123123", CreditStatus.Segment(2)),
+        ClientProfile("31231231231", CreditStatus.Segment(3))
     )
 
     override suspend fun getClientByPersonalCode(personalCode: String): ClientProfile {

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.darja.inbdemo.ui.decision.DecisionActivityView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/decision_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="32dp">
+
+    <!-- Title: Congratulations or Sorry -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/decision_title"
+        tools:text="Congratulations!"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"
+        />
+
+    <!-- Description -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/decision_description"
+        tools:text="Your loan is approved"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/decision_title"
+        android:gravity="center"
+        android:textSize="16sp"
+        android:lineSpacingMultiplier="1.4"
+        android:layout_marginTop="32dp"
+        />
+
+    <!-- Contact support -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/decision_contact_support"
+        android:text="@string/decision_contact_support"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/decision_description"
+        android:gravity="center"
+        android:layout_marginTop="32dp"
+        />
+</com.darja.inbdemo.ui.decision.DecisionActivityView>

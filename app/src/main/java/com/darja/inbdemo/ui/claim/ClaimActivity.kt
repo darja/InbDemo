@@ -1,10 +1,11 @@
 package com.darja.inbdemo.ui.claim
 
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.darja.inbdemo.R
+import com.darja.inbdemo.domain.model.LoanClaim
 import com.darja.inbdemo.ui.decision.DecisionActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -44,8 +45,8 @@ class ClaimActivity: AppCompatActivity(), ClaimActivityView.Owner {
         val period = viewModel.validatePeriod(view.getPeriod())
 
         if (personalCode != null && amount != null && period != null) {
-            Log.i("Claim", "Input is valid")
-        } else {
-            Log.w("Claim", "Input is invalid")
+            val intent = Intent(this, DecisionActivity::class.java)
+            intent.putExtra(DecisionActivity.EXTRA_CLAIM, LoanClaim(personalCode, amount, period))
+            startActivity(intent)
         }
     }}

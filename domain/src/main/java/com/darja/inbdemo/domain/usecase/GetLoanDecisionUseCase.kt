@@ -1,6 +1,7 @@
 package com.darja.inbdemo.domain.usecase
 
 import com.darja.inbdemo.domain.model.CreditStatus
+import com.darja.inbdemo.domain.model.LoanClaim
 import com.darja.inbdemo.domain.model.LoanDecision
 import com.darja.inbdemo.domain.model.RejectionReason
 import com.darja.inbdemo.domain.repo.ClientNotFoundException
@@ -9,11 +10,11 @@ import com.darja.inbdemo.domain.repo.CreditRulesRepository
 
 class GetLoanDecisionUseCase(private val clientRepository: ClientRepository,
                              private val creditRules: CreditRulesRepository) {
-    suspend fun execute(request: Request): LoanDecision {
+    suspend fun execute(claim: LoanClaim): LoanDecision {
         lateinit var decision: LoanDecision
 
         try {
-            val client = clientRepository.getClientByPersonalCode(request.personalCode)
+            val client = clientRepository.getClientByPersonalCode(claim.personalCode)
 
             when (client.creditStatus) {
                 // client has debt
@@ -24,12 +25,12 @@ class GetLoanDecisionUseCase(private val clientRepository: ClientRepository,
                     val creditModifier = creditRules.getCreditModifier(client.creditStatus.segment)
 
                     // Score = Period * CreditModifier / Amount
-                    val score = request.periodMonths * 1f * creditModifier / request.amount
+                    val score = claim.periodMonths * 1f * creditModifier / claim.amount
 
                     // Amount = Period * CreditModifier / Score
                     // as amount and score are inversely proportional, the biggest amount is reached when score is minimum.
                     // minimum accepted score is 1, so MaxAmount = Period * CreditModifier
-                    val maxAmount = request.periodMonths * creditModifier
+                    val maxAmount = claim.periodMonths * creditModifier
 
                     decision = if (score > 1) {
                         LoanDecision.Approved(maxAmount)
@@ -46,10 +47,4 @@ class GetLoanDecisionUseCase(private val clientRepository: ClientRepository,
 
         return decision
     }
-
-    data class Request(
-        val personalCode: String,
-        val amount: Int,
-        val periodMonths: Int
-    )
 }
