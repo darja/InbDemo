@@ -11,21 +11,16 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
-val app = module {
+val appModule = module {
     single { ResourceProvider(androidContext().resources) }
 
 }
 
-// todo modules for features, not for layers
-val data = module {
+val decisionActivityModule = module {
     single<CreditRulesRepository> { HardcodedCreditRulesRepository() }
     single<ClientRepository> { HardcodedClientRepository() }
-}
 
-val domain = module {
     factory { GetLoanDecisionUseCase(get(), get()) }
-}
 
-val mvvm = module {
     viewModel { DecisionActivityViewModel(get(), get(), get()) }
 }
