@@ -1,6 +1,7 @@
 package com.darja.inbdemo
 
 import android.app.Application
+import com.darja.inbdemo.di.app
 import com.darja.inbdemo.di.data
 import com.darja.inbdemo.di.domain
 import com.darja.inbdemo.di.mvvm
@@ -14,7 +15,7 @@ class InbDemoApplication: Application() {
         // Dependency injection
         startKoin {
             androidContext(this@InbDemoApplication)
-            modules(listOf(data, domain, mvvm))
+            modules(listOf(app, data, domain, mvvm))
         }
     }
 }

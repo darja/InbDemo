@@ -17,7 +17,13 @@ class DecisionActivity : AppCompatActivity(), DecisionActivityView.Owner {
         view = findViewById(R.id.decision_root)
         view.owner = this
 
+        setupView()
         observeViewModel()
+    }
+
+    private fun setupView() {
+        view.setAmountHelperText(viewModel.getAmountHelperText())
+        view.setPeriodHelperText(viewModel.getPeriodHelperText())
     }
 
     private fun observeViewModel() {

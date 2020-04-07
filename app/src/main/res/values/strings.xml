@@ -9,8 +9,8 @@
     <string name="button_check">Check</string>
 
     <string name="helper_personal_code">11 digits</string>
-    <string name="helper_amount">2000 – 10 000 EUR</string>
-    <string name="helper_period">12 – 60 months</string>
+    <string name="helper_amount_format">%1$s—%2$s EUR</string>
+    <string name="helper_period_format">%1$s—%2$s months</string>
 
     <string name="error_personal_code_length">Value should contain 11 digits</string>
 </resources>
