@@ -5,14 +5,13 @@ import android.util.AttributeSet
 import android.widget.Button
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.darja.inbdemo.R
-import com.darja.inbdemo.view.ValidatedTextInput
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 
 class DecisionActivityView(context: Context, attrs: AttributeSet) : ConstraintLayout(context, attrs) {
     private lateinit var personalNumberView: TextInputEditText
     private lateinit var personalNumberContainerView: TextInputLayout
-    private lateinit var amountView: ValidatedTextInput
+    private lateinit var amountView: TextInputLayout
     private lateinit var periodView: TextInputEditText
     private lateinit var checkButton: Button
 
@@ -28,15 +27,6 @@ class DecisionActivityView(context: Context, attrs: AttributeSet) : ConstraintLa
         checkButton = findViewById(R.id.decision_check_button)
 
         checkButton.setOnClickListener { owner?.onCheckLoanButtonClick() }
-
-        amountView.validator = { view ->
-            val amount = view.getIntValue()
-            if (amount == null || amount < 2000 || amount > 10000) {
-                "Amount should be between 2000 and 10000"
-            } else {
-                null
-            }
-        }
     }
 
     internal fun getPersonalCode(): String {

@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:paddingStart="64dp"
     android:paddingEnd="64dp"
-    android:paddingTop="64dp"
+    android:paddingTop="32dp"
     tools:context=".ui.decision.DecisionActivity">
 
     <!-- Personal Code -->
@@ -20,33 +20,37 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:hint="@string/hint_personal_code"
+        app:helperText="@string/helper_personal_code"
         >
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/decision_personal_number"
             android:inputType="number"
-            android:hint="@string/hint_personal_code"
             android:maxLength="11"
             />
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Amount -->
-    <com.darja.inbdemo.view.ValidatedTextInput
-        android:layout_width="0dp"
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/decision_amount_container"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/decision_amount_units"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/decision_personal_number_container"
-        android:layout_marginEnd="16dp"
         android:layout_marginTop="16dp"
         android:hint="@string/hint_amount"
-        android:inputType="number"
-        android:maxLength="4"
-        app:validation_event="lost_focus"
-        />
+        app:helperText="@string/helper_amount"
+        >
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/decision_amount"
+            android:inputType="number"
+            android:maxLength="11"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Amount unit label -->
     <TextView
@@ -72,13 +76,13 @@
         android:layout_marginEnd="16dp"
         android:layout_marginTop="16dp"
         android:hint="@string/hint_period"
+        app:helperText="@string/helper_period"
         >
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/decision_period"
             android:inputType="number"
-            android:hint="@string/hint_period"
             />
     </com.google.android.material.textfield.TextInputLayout>
 
