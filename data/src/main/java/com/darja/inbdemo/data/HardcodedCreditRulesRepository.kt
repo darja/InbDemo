@@ -11,4 +11,12 @@ class HardcodedCreditRulesRepository: CreditRulesRepository {
             else -> throw IllegalArgumentException("Unexpected segment: $segment")
         }
     }
+
+    override fun getMinLoan() = 2000
+
+    override fun getMaxLoan() = 10000
+
+    override fun getMinPeriod() = 12
+
+    override fun getMaxPeriod() = 60
 }
