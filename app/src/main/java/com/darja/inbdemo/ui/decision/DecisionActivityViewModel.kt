@@ -66,6 +66,9 @@ class DecisionActivityViewModel(
 
             RejectionReason.UNKNOWN_CLIENT ->
                 resourceProvider.getString(R.string.decision_description_reject_unknown_client, claim.personalCode)
+
+            RejectionReason.INSUFFICIENT_SCORE ->
+                resourceProvider.getString(R.string.decision_description_reject_insufficient_score)
         }
 
         return resourceProvider.getString(R.string.decision_description_reject, reason)

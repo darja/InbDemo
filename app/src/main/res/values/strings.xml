@@ -22,6 +22,7 @@
     <string name="decision_description_reject_with_options">We can to offer you up to &lt;b&gt;%1$s EUR&lt;/b&gt; for %2$s&#160;months.&lt;\br&gt;Unfortunately, %3$s&#160;EUR is currently unavailable for you.</string>
     <string name="decision_description_reject">Unfortunately we cannot offer you a credit. %1$s</string>
     <string name="decision_description_reject_debt">Currently, you have a debt</string>
+    <string name="decision_description_reject_insufficient_score">Please try longer period</string>
     <string name="decision_description_reject_unknown_client">Seems your are not a client of the bank. We cannot find the profile with the personal code &lt;b&gt;%1$s&lt;\b&gt;</string>
 
     <string name="decision_contact_support">Please contact support if you have any questions or concerns</string>
